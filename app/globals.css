@@ -50,6 +50,10 @@
 
   /* --- Font --- */
   --font-sans: "Uncut Sans", system-ui, sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-montserrat: "Montserrat", system-ui, sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
 }
 
 @theme inline {
@@ -63,4 +67,13 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #9D0808;
+  color: #ffffff;
 }

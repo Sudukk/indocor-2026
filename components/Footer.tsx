@@ -1,73 +1,122 @@
 import Link from "next/link";
-import { Mail, MapPin, Instagram, Linkedin } from "lucide-react";
+import { Mail, MapPin, Instagram, Linkedin, Youtube } from "lucide-react";
+
+const navLinks = [
+    { label: "Beranda", href: "/" },
+    { label: "Tentang Kami", href: "/about" },
+    { label: "Kegiatan", href: "/activities" },
+    { label: "Tim", href: "/team" },
+];
+
+const programLinks = [
+    { label: "Sertifikasi ICCP", href: "/register-iccp" },
+    { label: "Blog & Artikel", href: "/blog" },
+    { label: "Coming Soon", href: "/coming-soon" },
+];
+
+const socials = [
+    { icon: Instagram, href: "https://instagram.com/indocor_its", label: "Instagram" },
+    { icon: Linkedin, href: "https://linkedin.com/company/indocor-its", label: "LinkedIn" },
+    { icon: Youtube, href: "#", label: "YouTube" },
+];
 
 export default function Footer() {
     return (
-        <footer className="bg-navy-900 text-steel-400 py-12 border-t border-navy-800">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {/* Brand */}
-                    <div className="space-y-4">
-                        <Link href="/" className="font-heading font-bold text-2xl text-white flex items-center gap-2">
-                            <span className="text-primary-500">INDOCOR</span>
-                            <span className="font-light">ITS</span>
-                        </Link>
-                        <p className="text-sm max-w-sm leading-relaxed">
-                            Indonesian Corrosion Association Student Chapter of Institut Teknologi Sepuluh Nopember. Advancing corrosion knowledge and practices.
-                        </p>
-                        <div className="flex space-x-4 pt-2">
-                            <a href="#" className="text-steel-400 hover:text-white transition-colors">
-                                <Instagram size={20} />
-                            </a>
-                            <a href="#" className="text-steel-400 hover:text-white transition-colors">
-                                <Linkedin size={20} />
-                            </a>
+        <footer className="w-full bg-gray-50 text-gray-500 border-t border-gray-200">
+            {/* Main footer grid */}
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+
+                {/* Brand column */}
+                <div className="sm:col-span-2 lg:col-span-1 space-y-5">
+                    <Link href="/" className="inline-flex flex-row items-center gap-3">
+                        <img
+                            src="/images/logo/logo-besar.svg"
+                            alt="INDOCOR ITS SC"
+                            className="h-12 w-auto"
+                        />
+                        <div className="flex flex-col leading-none">
+                            <span className="text-2xl font-extrabold text-black tracking-tight">INDOCOR</span>
+                            <span className="text-xs font-light text-gray-400 tracking-widest uppercase mt-1">ITS Student Chapter</span>
                         </div>
-                    </div>
-
-                    {/* Contact */}
-                    <div className="space-y-4">
-                        <h4 className="font-heading text-lg font-semibold text-white">Contact Us</h4>
-                        <ul className="space-y-3">
-                            <li className="flex items-start gap-3">
-                                <MapPin size={20} className="text-primary-500 shrink-0 mt-0.5" />
-                                <span className="text-sm">
-                                    Departemen Teknik Material dan Metalurgi<br />
-                                    Institut Teknologi Sepuluh Nopember<br />
-                                    Surabaya, Indonesia
-                                </span>
-                            </li>
-                            <li className="flex items-center gap-3">
-                                <Mail size={20} className="text-primary-500 shrink-0" />
-                                <a href="mailto:indocor@its.ac.id" className="text-sm hover:text-white transition-colors">
-                                    indocor@its.ac.id
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Quick Links */}
-                    <div className="space-y-4">
-                        <h4 className="font-heading text-lg font-semibold text-white">Quick Links</h4>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="#about" className="text-sm hover:text-white transition-colors">About Us</Link>
-                            </li>
-                            <li>
-                                <Link href="#events" className="text-sm hover:text-white transition-colors">Events</Link>
-                            </li>
-                            <li>
-                                <Link href="#resources" className="text-sm hover:text-white transition-colors">Resources</Link>
-                            </li>
-                            <li>
-                                <Link href="#join" className="text-sm hover:text-white transition-colors">Join Chapter</Link>
-                            </li>
-                        </ul>
+                    </Link>
+                    <p className="text-sm leading-relaxed max-w-xs">
+                        Indonesian Corrosion Association Student Chapter — mempersiapkan
+                        profesional muda di bidang teknik korosi for Indonesia dan dunia.
+                    </p>
+                    {/* Social icons */}
+                    <div className="flex items-center gap-4 pt-1">
+                        {socials.map(({ icon: Icon, href, label }) => (
+                            <a
+                                key={label}
+                                href={href}
+                                aria-label={label}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-9 h-9 rounded-lg bg-gray-200 hover:bg-[#9D0808] hover:text-white flex items-center justify-center transition-colors"
+                            >
+                                <Icon size={16} className="text-gray-600 group-hover:text-white" />
+                            </a>
+                        ))}
                     </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-navy-800 text-sm text-center">
-                    <p>&copy; {new Date().getFullYear()} INDOCOR ITS Student Chapter. All rights reserved.</p>
+                {/* Navigation */}
+                <div className="space-y-4">
+                    <h4 className="text-black font-semibold text-sm uppercase tracking-widest">Navigasi</h4>
+                    <ul className="space-y-2.5">
+                        {navLinks.map(({ label, href }) => (
+                            <li key={label}>
+                                <Link href={href} className="text-sm hover:text-black transition-colors">
+                                    {label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Programs */}
+                <div className="space-y-4">
+                    <h4 className="text-black font-semibold text-sm uppercase tracking-widest">Program</h4>
+                    <ul className="space-y-2.5">
+                        {programLinks.map(({ label, href }) => (
+                            <li key={label}>
+                                <Link href={href} className="text-sm hover:text-black transition-colors">
+                                    {label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Contact */}
+                <div className="space-y-4">
+                    <h4 className="text-black font-semibold text-sm uppercase tracking-widest">Kontak</h4>
+                    <ul className="space-y-4">
+                        <li className="flex items-start gap-3">
+                            <MapPin size={16} className="text-[#9D0808] shrink-0 mt-0.5" />
+                            <span className="text-sm leading-relaxed">
+                                Departemen Teknik Material dan Metalurgi,<br />
+                                Institut Teknologi Sepuluh Nopember,<br />
+                                Surabaya, Indonesia
+                            </span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                            <Mail size={16} className="text-[#9D0808] shrink-0" />
+                            <a
+                                href="mailto:indocor@its.ac.id"
+                                className="text-sm hover:text-black transition-colors"
+                            >
+                                indocor@its.ac.id
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {/* Bottom bar */}
+            <div className="border-t border-gray-200">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
+                    <p className="text-gray-400">© {new Date().getFullYear()} INDOCOR ITS Student Chapter. All rights reserved.</p>
                 </div>
             </div>
         </footer>
