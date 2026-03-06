@@ -1,30 +1,58 @@
-INDOCOR ITS 2026
-Proyek ini adalah situs web resmi untuk INDOCOR 2026, yang dikembangkan menggunakan Next.js. Platform ini berfungsi sebagai pusat informasi untuk kegiatan, artikel, tim, dan pendaftaran ICCP.
+# INDOCOR ITS 2026
 
-🚀 Teknologi yang Digunakan
-Framework: Next.js (App Router)
+Proyek ini adalah situs web resmi untuk **INDOCOR 2026**, yang dikembangkan menggunakan **Next.js**.  
+Platform ini berfungsi sebagai pusat informasi untuk kegiatan, artikel, tim, dan pendaftaran **ICCP**.
 
-Bahasa: TypeScript
+---
 
-Styling: Tailwind CSS
+## 🚀 Teknologi yang Digunakan
 
-Komponen UI: Framer Motion (untuk animasi FadeIn) dan Lucid React
+- **Framework:** Next.js (App Router)  
+- **Bahasa:** TypeScript  
+- **Styling:** Tailwind CSS  
+- **Komponen UI:** Framer Motion (untuk animasi FadeIn) dan Lucide React  
+- **Linter:** ESLint  
 
-Linter: ESLint
+---
 
-📁 Struktur Folder Utama
-/app: Berisi rute utama aplikasi seperti about, admin, blog, team, dan register-iccp.
+## 📁 Struktur Folder Utama
 
-/components: Komponen UI yang dapat digunakan kembali seperti Navbar, Footer, dan Button.
+```
+/app
+  ├── about
+  ├── admin
+  ├── blog
+  ├── team
+  └── register-iccp
 
-/containers: Logika spesifik halaman dan bagian-bagian besar (misalnya Hero, ICCPSection, LatestArticles).
+/components
+  ├── Navbar
+  ├── Footer
+  └── Button
 
-/public: Aset statis seperti gambar dan logo.
+/containers
+  ├── Hero
+  ├── ICCPSection
+  └── LatestArticles
 
-🛠 Memulai Pengembangan
-Pertama, jalankan server pengembangan:
+/public
+  └── assets (gambar, logo, dll)
+```
 
-Bash
+**Penjelasan:**
+
+- **/app** – Berisi rute utama aplikasi seperti `about`, `admin`, `blog`, `team`, dan `register-iccp`.
+- **/components** – Komponen UI yang dapat digunakan kembali seperti **Navbar**, **Footer**, dan **Button**.
+- **/containers** – Berisi logika halaman atau section besar seperti **Hero**, **ICCP Section**, dan **Latest Articles**.
+- **/public** – Aset statis seperti gambar, logo, dan file publik lainnya.
+
+---
+
+## 🛠 Memulai Pengembangan
+
+Jalankan server development:
+
+```bash
 npm run dev
 # atau
 yarn dev
@@ -32,18 +60,43 @@ yarn dev
 pnpm dev
 # atau
 bun dev
-Buka http://localhost:3000 di browser Anda untuk melihat hasilnya.
+```
 
-📝 Fitur Utama
-Landing Page: Menampilkan preview tentang INDOCOR, kegiatan terbaru, dan artikel.
+Setelah itu buka browser dan akses:
 
-Panel Admin: Manajemen artikel dan aktivitas (memerlukan login).
+```
+http://localhost:3000
+```
 
-Pendaftaran ICCP: Formulir khusus untuk pendaftaran peserta.
+---
 
-Blog & Berita: Halaman arsip artikel terbaru terkait korosi dan industri.
+## 📝 Fitur Utama
 
-🚀 Deployment
-Cara termudah untuk melakukan deployment aplikasi Next.js ini adalah dengan menggunakan Vercel Platform.
+### Landing Page
+Menampilkan preview tentang **INDOCOR**, kegiatan terbaru, serta artikel terbaru.
 
-Dibuat oleh tim pengembang INDOCOR ITS 2026.
+### Panel Admin
+Digunakan untuk **mengelola artikel dan aktivitas** yang ditampilkan pada website.  
+Akses memerlukan **login admin**.
+
+### Pendaftaran ICCP
+Halaman khusus yang menyediakan **formulir pendaftaran peserta ICCP**.
+
+### Blog & Berita
+Halaman arsip artikel yang berisi **informasi terbaru mengenai korosi dan industri terkait**.
+
+---
+
+## 🚀 Deployment
+
+Cara termudah untuk melakukan deployment aplikasi **Next.js** ini adalah menggunakan:
+
+**Vercel Platform**
+
+Vercel menyediakan integrasi langsung dengan Next.js sehingga deployment dapat dilakukan dengan cepat dan mudah.
+
+---
+
+## 👨‍💻 Tim Pengembang
+
+Dibuat oleh **Tim Pengembang INDOCOR ITS 2026**.
