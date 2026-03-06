@@ -1,37 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+INDOCOR ITS 2026
+Proyek ini adalah situs web resmi untuk INDOCOR 2026, yang dikembangkan menggunakan Next.js. Platform ini berfungsi sebagai pusat informasi untuk kegiatan, artikel, tim, dan pendaftaran ICCP.
 
-## Getting Started
+🚀 Teknologi yang Digunakan
+Framework: Next.js (App Router)
 
-First, run the development server:
+Bahasa: TypeScript
 
-```bash
+Styling: Tailwind CSS
+
+Komponen UI: Framer Motion (untuk animasi FadeIn) dan Lucid React
+
+Linter: ESLint
+
+📁 Struktur Folder Utama
+/app: Berisi rute utama aplikasi seperti about, admin, blog, team, dan register-iccp.
+
+/components: Komponen UI yang dapat digunakan kembali seperti Navbar, Footer, dan Button.
+
+/containers: Logika spesifik halaman dan bagian-bagian besar (misalnya Hero, ICCPSection, LatestArticles).
+
+/public: Aset statis seperti gambar dan logo.
+
+🛠 Memulai Pengembangan
+Pertama, jalankan server pengembangan:
+
+Bash
 npm run dev
-# or
+# atau
 yarn dev
-# or
+# atau
 pnpm dev
-# or
+# atau
 bun dev
-```
+Buka http://localhost:3000 di browser Anda untuk melihat hasilnya.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📝 Fitur Utama
+Landing Page: Menampilkan preview tentang INDOCOR, kegiatan terbaru, dan artikel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Panel Admin: Manajemen artikel dan aktivitas (memerlukan login).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Pendaftaran ICCP: Formulir khusus untuk pendaftaran peserta.
 
-## Learn More
+Blog & Berita: Halaman arsip artikel terbaru terkait korosi dan industri.
 
-To learn more about Next.js, take a look at the following resources:
+🚀 Deployment
+Cara termudah untuk melakukan deployment aplikasi Next.js ini adalah dengan menggunakan Vercel Platform.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# indocor-2026
+Dibuat oleh tim pengembang INDOCOR ITS 2026.
