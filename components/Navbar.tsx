@@ -10,24 +10,41 @@ const navLinks = [
     { name: "About Us", href: "/about" },
     { name: "Blog", href: "/blog" },
     { name: "Our Team", href: "/team" },
-    { name: "Event", href: "/activities" },
+    { name: "Event", href: "/event" },
 ];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [visible, setVisible] = useState(true);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
-        window.addEventListener("scroll", handleScroll);
+        let lastScrollY = window.scrollY;
+
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Hide navbar if scrolling down past 80px, show if scrolling up
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                setVisible(false);
+            } else {
+                setVisible(true);
+            }
+
+            setScrolled(currentScrollY > 20);
+            lastScrollY = currentScrollY;
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     return (
         <header
-            className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled
-                ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
-                : "bg-white border-b border-gray-200"
+            className={`fixed top-0 w-full z-50 transition-all duration-300 ${visible ? "translate-y-0" : "-translate-y-full"
+                } ${scrolled
+                    ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
+                    : "bg-white border-b border-gray-200"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">

@@ -22,7 +22,8 @@ const socials = [
 
 export default function Footer() {
     return (
-        <footer className="w-full bg-gray-50 text-gray-500 border-t border-gray-200">
+        <footer className="relative w-full bg-gray-50 text-gray-500 border-t border-gray-200 overflow-hidden">
+
             {/* Main footer grid */}
             <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
 
