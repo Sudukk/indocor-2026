@@ -18,8 +18,7 @@ export const Hero = () => {
                     </p>
                 </div>
 
-                {/* Cards — sit above the background image via relative z-10 */}
-                <div className="relative z-10 flex flex-col sm:flex-row gap-6 mb-[-80px] md:mb-[-100px]">
+                <div className="relative z-10 flex flex-col sm:flex-row gap-6 mb-[-260px] sm:mb-[-100px] md:mb-[-120px]">
                     <a
                         href="#"
                         className="group flex flex-col justify-between rounded-xl bg-red p-6 sm:p-8 w-full sm:max-w-[320px] min-h-[220px] text-white transition-all hover:scale-[1.02] shadow-sm hover:shadow-md"
@@ -56,11 +55,10 @@ export const Hero = () => {
                 </div>
             </div>
 
-            {/* Background image — in-flow, fills bottom of section and bleeds into next section */}
             <img
                 src="/images/landing-page/background2.png"
                 alt="Hero background"
-                className="relative z-0 w-full object-cover block"
+                className="relative z-0 w-full h-[500px] sm:h-auto object-cover object-bottom block"
             />
         </section>
     );

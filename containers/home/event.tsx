@@ -44,7 +44,7 @@ export const EventSection = () => {
                     Where Ideas Get<br />Energized.
                 </h2>
                 <Link
-                    href="/events"
+                    href="/event"
                     className="inline-block bg-[#9D0808] hover:bg-red-800 text-white font-medium py-3 px-8 rounded-full transition-colors shrink-0"
                 >
                     View Our Event
@@ -60,7 +60,7 @@ export const EventSection = () => {
                             className="w-full flex flex-col border-b border-white/20 bg-[#EF3D3D]"
                             onMouseEnter={() => setActiveIndex(index)}
                         >
-                            {/* Header Row */}
+                            {/* Header */}
                             <div className={`w-full py-8 md:py-10 px-6 md:px-12 lg:px-20 flex items-center justify-between cursor-pointer transition-colors ${isActive ? 'bg-[#EF3D3D]' : 'bg-[#EF3D3D] hover:bg-[#D32F2F]'}`}>
                                 <div className="flex items-start md:items-center gap-8 md:gap-16 w-full max-w-[1400px] mx-auto">
                                     <span className="text-4xl md:text-5xl font-bold text-white shrink-0">

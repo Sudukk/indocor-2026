@@ -93,7 +93,7 @@ export const LatestArticles = () => {
                 {/* Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-                    {/* Left col: featured big + article 4 horizontal below */}
+                    {/* Featured Articles */}
                     <FadeIn direction="left" delay={0.1} className="lg:col-span-3 flex flex-col gap-6">
                         <Link
                             href={featured.href}
@@ -112,7 +112,7 @@ export const LatestArticles = () => {
                             </div>
                         </Link>
 
-                        {/* Article 4 — same style as featured */}
+                        {/* Secondary Article */}
                         <Link
                             href={fourth.href}
                             className="group relative rounded-2xl overflow-hidden min-h-[180px] flex flex-col justify-end shadow-lg hover:shadow-xl transition-shadow block"
@@ -130,7 +130,7 @@ export const LatestArticles = () => {
                         </Link>
                     </FadeIn>
 
-                    {/* Right col: editorial list cards — different style */}
+                    {/* Related Articles */}
                     <FadeIn direction="right" delay={0.2} className="lg:col-span-2 flex flex-col gap-4">
                         <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Baca Juga</p>
                         {[second, third].map((article) => (
@@ -159,7 +159,7 @@ export const LatestArticles = () => {
                             </Link>
                         ))}
 
-                        {/* Divider + CTA */}
+                        {/* CTA */}
                         <div className="mt-auto pt-4 border-t border-gray-200">
                             <Link href="/blog" className="group inline-flex items-center gap-2 text-sm font-semibold text-[#9D0808] hover:gap-3 transition-all">
                                 Lihat semua artikel
