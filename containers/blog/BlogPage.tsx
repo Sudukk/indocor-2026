@@ -96,12 +96,23 @@ export default function BlogPage() {
                             <FadeIn key={article.id} direction="up" delay={0.1 * (index + 1)}>
                                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col group hover:-translate-y-1">
 
-                                    {/* PDF Icon Header */}
-                                    <div className="bg-gradient-to-br from-red/5 to-red/10 p-8 flex items-center justify-center">
-                                        <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                                            <FileText size={36} className="text-red" />
+                                    {/* Cover Image or PDF Icon */}
+                                    {article.image_cover ? (
+                                        <div className="relative w-full h-48 overflow-hidden">
+                                            <Image
+                                                src={article.image_cover}
+                                                alt={article.title}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                            />
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="bg-gradient-to-br from-red/5 to-red/10 p-8 flex items-center justify-center">
+                                            <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                <FileText size={36} className="text-red" />
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Content */}
                                     <div className="p-6 md:p-8 flex flex-col flex-grow">

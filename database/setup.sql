@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS admin_users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert default admin (password: indocor2026)
-INSERT INTO admin_users (username, password, role) VALUES ('admin', 'indocor2026', 'admin')
+-- Insert default admin (password: adminambatukam)
+INSERT INTO admin_users (username, password, role) VALUES ('admin', 'adminambatukam', 'admin')
 ON DUPLICATE KEY UPDATE username = username;
 
--- Insert default superadmin (password: ambatukan)
-INSERT INTO admin_users (username, password, role) VALUES ('superadmin', 'ambatukan', 'superadmin')
+-- Insert default superadmin (password: superadminambatukam)
+INSERT INTO admin_users (username, password, role) VALUES ('superadmin', 'superadminambatukam', 'superadmin')
 ON DUPLICATE KEY UPDATE role = 'superadmin';
 
 -- ============================================

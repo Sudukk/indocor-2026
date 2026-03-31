@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock, User, AlertCircle } from "lucide-react";
+import { Loader2, Lock, User, AlertCircle, Shield, ArrowRight } from "lucide-react";
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -10,6 +10,8 @@ export default function AdminLoginPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [showRoleChoice, setShowRoleChoice] = useState(false);
+    const [userData, setUserData] = useState<{ id: number; username: string; role: string } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,6 +32,14 @@ export default function AdminLoginPage() {
                 return;
             }
 
+            // If superadmin, show role choice
+            if (data.user?.role === "superadmin") {
+                setUserData(data.user);
+                setShowRoleChoice(true);
+                return;
+            }
+
+            // Regular admin — go to admin dashboard
             localStorage.setItem("admin_logged_in", "true");
             localStorage.setItem("admin_user", JSON.stringify(data.user));
             router.replace("/admin");
@@ -39,6 +49,77 @@ export default function AdminLoginPage() {
             setIsLoading(false);
         }
     };
+
+    const handleRoleChoice = (role: "admin" | "superadmin") => {
+        if (!userData) return;
+
+        if (role === "superadmin") {
+            localStorage.setItem("superadmin_logged_in", "true");
+            localStorage.setItem("superadmin_user", JSON.stringify(userData));
+            router.replace("/superadmin");
+        } else {
+            localStorage.setItem("admin_logged_in", "true");
+            localStorage.setItem("admin_user", JSON.stringify(userData));
+            router.replace("/admin");
+        }
+    };
+
+    // Role choice screen for superadmin
+    if (showRoleChoice && userData) {
+        return (
+            <main className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
+                <div className="w-full max-w-md">
+                    <div className="text-center mb-10">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red to-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                            <Shield className="text-white" size={28} />
+                        </div>
+                        <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                            Selamat Datang
+                        </h1>
+                        <p className="text-gray-400 mt-2 text-sm">
+                            Hai <span className="text-white font-bold">{userData.username}</span>, pilih dashboard yang ingin diakses
+                        </p>
+                    </div>
+
+                    <div className="space-y-4">
+                        {/* Admin Panel Option */}
+                        <button
+                            onClick={() => handleRoleChoice("admin")}
+                            className="w-full bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all group text-left flex items-center gap-5 hover:-translate-y-0.5"
+                        >
+                            <div className="w-14 h-14 rounded-xl bg-red/10 flex items-center justify-center flex-shrink-0 group-hover:bg-red/20 transition-colors">
+                                <Lock size={24} className="text-red" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-bold text-gray-900 text-lg">Panel Admin</p>
+                                <p className="text-gray-500 text-sm mt-0.5">Kelola artikel & kegiatan</p>
+                            </div>
+                            <ArrowRight size={20} className="text-gray-400 group-hover:text-red group-hover:translate-x-1 transition-all" />
+                        </button>
+
+                        {/* Super Admin Panel Option */}
+                        <button
+                            onClick={() => handleRoleChoice("superadmin")}
+                            className="w-full bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all group text-left flex items-center gap-5 hover:-translate-y-0.5"
+                        >
+                            <div className="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-200 transition-colors">
+                                <Shield size={24} className="text-indigo-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-bold text-gray-900 text-lg">Panel Super Admin</p>
+                                <p className="text-gray-500 text-sm mt-0.5">Review & approve konten</p>
+                            </div>
+                            <ArrowRight size={20} className="text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                        </button>
+                    </div>
+
+                    <p className="text-center text-gray-600 text-xs mt-8">
+                        &copy; 2026 INDOCOR ITS Student Chapter
+                    </p>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
