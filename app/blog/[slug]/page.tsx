@@ -1,48 +1,64 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { blogData } from '@/data/blog';
 import BlogDetail from '@/containers/blog/BlogDetail';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
-// Generate static params for all known blog posts (optional but good for performance)
-export function generateStaticParams() {
-    return blogData.map((blog) => ({
-        slug: blog.slug,
-    }));
-}
+import pool from '@/lib/db';
+import { RowDataPacket } from 'mysql2';
 
 // Generate dynamic metadata based on the blog slug
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const blog = blogData.find((b) => b.slug === slug);
 
-    if (!blog) {
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>(
+            "SELECT title, author FROM articles WHERE slug = ?",
+            [slug]
+        );
+
+        if (rows.length === 0) {
+            return { title: 'Artikel Tidak Ditemukan - INDOCOR ITS SC' };
+        }
+
         return {
-            title: 'Artikel Tidak Ditemukan - INDOCOR ITS SC',
+            title: `${rows[0].title} - INDOCOR ITS SC`,
+            description: `Artikel oleh ${rows[0].author} - INDOCOR ITS Student Chapter`,
         };
+    } catch {
+        return { title: 'Artikel - INDOCOR ITS SC' };
     }
-
-    return {
-        title: `${blog.title} - INDOCOR ITS SC`,
-        description: blog.excerpt,
-    };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const blog = blogData.find((b) => b.slug === slug);
 
-    if (!blog) {
-        // Automatically render the generic 404 page if blog is not found
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>(
+            "SELECT * FROM articles WHERE slug = ?",
+            [slug]
+        );
+
+        if (rows.length === 0) {
+            notFound();
+        }
+
+        const blog = {
+            id: String(rows[0].id),
+            slug: rows[0].slug,
+            title: rows[0].title,
+            date: rows[0].date,
+            author: rows[0].author,
+            pdf_file: rows[0].pdf_file,
+        };
+
+        return (
+            <main className="bg-white min-h-screen pt-20">
+                <Navbar />
+                <BlogDetail blog={blog} />
+                <Footer />
+            </main>
+        );
+    } catch {
         notFound();
     }
-
-    return (
-        <main className="bg-white min-h-screen pt-20">
-            <Navbar />
-            <BlogDetail blog={blog} />
-            <Footer />
-        </main>
-    );
 }

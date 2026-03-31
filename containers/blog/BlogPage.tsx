@@ -1,18 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FadeIn } from "@/components/FadeIn";
-import { CalendarDays, ArrowRight, User } from "lucide-react";
-import { blogData } from "@/data/blog";
+import { CalendarDays, ArrowRight, User, Loader2, FileText, Download } from "lucide-react";
+
+interface Article {
+    id: number;
+    slug: string;
+    title: string;
+    date: string;
+    author: string;
+    image_cover: string;
+    pdf_file: string;
+}
 
 export default function BlogPage() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredBlogs = blogData.filter(blog =>
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.category.toLowerCase().includes(searchQuery.toLowerCase())
+    useEffect(() => {
+        async function fetchArticles() {
+            try {
+                const res = await fetch("/api/articles");
+                const data = await res.json();
+                setArticles(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchArticles();
+    }, []);
+
+    const filtered = articles.filter(
+        (a) =>
+            a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            a.author.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -25,13 +52,13 @@ export default function BlogPage() {
                 <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10 text-center">
                     <FadeIn direction="up">
                         <span className="inline-block py-1 px-3 rounded-full bg-red/10 border border-red/20 text-red text-xs font-bold tracking-widest uppercase mb-6">
-                            Insights & Berita
+                            Publikasi & Artikel
                         </span>
                         <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight">
-                            Our Blog
+                            Our Articles
                         </h1>
                         <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
-                            Kumpulan artikel teknis, opini industri, dan kabar terbaru dari seluruh kegiatan operasional INDOCOR ITS Student Chapter.
+                            Kumpulan artikel dan publikasi dari INDOCOR ITS Student Chapter. Tersedia dalam format PDF untuk kemudahan akses dan distribusi.
                         </p>
                     </FadeIn>
                 </div>
@@ -46,7 +73,7 @@ export default function BlogPage() {
                         <div className="bg-white p-2 rounded-full shadow-lg border border-gray-100 flex items-center w-full max-w-xl">
                             <input
                                 type="text"
-                                placeholder="Cari artikel atau kategori..."
+                                placeholder="Cari artikel atau penulis..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full px-6 py-3 bg-transparent outline-none text-gray-700 placeholder:text-gray-400"
@@ -58,72 +85,62 @@ export default function BlogPage() {
                     </div>
                 </FadeIn>
 
-                {/* Grid */}
-                {filteredBlogs.length > 0 ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredBlogs.map((blog, index) => (
-                            <FadeIn key={blog.id} direction="up" delay={0.1 * (index + 1)}>
-                                <Link href={`/blog/${blog.slug}`} className="block h-full group">
-                                    <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-red/5 border border-gray-100/80 transition-all duration-500 h-full flex flex-col items-start translate-y-0 hover:-translate-y-2">
+                {/* Loading */}
+                {loading ? (
+                    <div className="flex items-center justify-center py-32">
+                        <Loader2 size={40} className="animate-spin text-gray-300" />
+                    </div>
+                ) : filtered.length > 0 ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.map((article, index) => (
+                            <FadeIn key={article.id} direction="up" delay={0.1 * (index + 1)}>
+                                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col group hover:-translate-y-1">
 
-                                        {/* Image */}
-                                        <div className="relative h-60 w-full overflow-hidden p-2">
-                                            <div className="relative h-full w-full rounded-2xl overflow-hidden">
-                                                <Image
-                                                    src={blog.image}
-                                                    alt={blog.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
-
-                                                {/* Category */}
-                                                <div className="absolute top-4 left-4 z-20">
-                                                    <span className="px-4 py-1.5 text-[11px] font-bold tracking-wider uppercase rounded-full bg-white text-black shadow-lg">
-                                                        {blog.category}
-                                                    </span>
-                                                </div>
-                                            </div>
+                                    {/* PDF Icon Header */}
+                                    <div className="bg-gradient-to-br from-red/5 to-red/10 p-8 flex items-center justify-center">
+                                        <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                            <FileText size={36} className="text-red" />
                                         </div>
-
-                                        {/* Content */}
-                                        <div className="p-8 flex flex-col flex-grow w-full">
-                                            {/* Meta */}
-                                            <div className="flex items-center gap-4 text-xs font-semibold text-gray-500 mb-4">
-                                                <div className="flex items-center gap-1.5">
-                                                    <CalendarDays size={14} className="text-red" />
-                                                    <span>{blog.date}</span>
-                                                </div>
-                                                <span className="w-1 h-1 rounded-full bg-gray-300" />
-                                                <div className="flex items-center gap-1.5">
-                                                    <User size={14} className="text-red" />
-                                                    <span className="truncate max-w-[100px]">{blog.author}</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Title */}
-                                            <h3 className="text-2xl font-bold text-gray-900 mb-4 line-clamp-3 group-hover:text-red transition-colors duration-300 leading-snug">
-                                                {blog.title}
-                                            </h3>
-
-                                            {/* Excerpt */}
-                                            <p className="text-gray-600 leading-relaxed line-clamp-2 mb-8 flex-grow">
-                                                {blog.excerpt}
-                                            </p>
-
-                                            {/* Footer */}
-                                            <div className="mt-auto w-full pt-6 border-t border-gray-100 flex items-center justify-between">
-                                                <span className="text-sm font-bold text-gray-900 group-hover:text-red transition-colors">
-                                                    Baca Selengkapnya
-                                                </span>
-                                                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-red group-hover:border-red group-hover:text-white transition-all duration-300">
-                                                    <ArrowRight size={14} className="text-current transition-transform duration-300 group-hover:-rotate-45" />
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
-                                </Link>
+
+                                    {/* Content */}
+                                    <div className="p-6 md:p-8 flex flex-col flex-grow">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-4 line-clamp-2 group-hover:text-red transition-colors leading-snug">
+                                            {article.title}
+                                        </h3>
+
+                                        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-gray-500 mb-6">
+                                            <div className="flex items-center gap-1.5">
+                                                <CalendarDays size={14} className="text-red" />
+                                                <span>{article.date}</span>
+                                            </div>
+                                            <span className="w-1 h-1 rounded-full bg-gray-300" />
+                                            <div className="flex items-center gap-1.5">
+                                                <User size={14} className="text-red" />
+                                                <span className="truncate max-w-[150px]">{article.author}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Actions */}
+                                        <div className="mt-auto pt-5 border-t border-gray-100 flex items-center gap-3">
+                                            <Link
+                                                href={`/blog/${article.slug}`}
+                                                className="flex-1 py-2.5 text-center text-sm font-bold text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                                            >
+                                                Lihat Detail
+                                            </Link>
+                                            <a
+                                                href={article.pdf_file}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex-1 py-2.5 text-center text-sm font-bold text-white bg-red rounded-xl hover:bg-red/90 transition-colors inline-flex items-center justify-center gap-2"
+                                            >
+                                                <Download size={14} />
+                                                Download
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </FadeIn>
                         ))}
                     </div>
@@ -131,20 +148,25 @@ export default function BlogPage() {
                     <FadeIn direction="up">
                         <div className="text-center py-32 bg-white rounded-3xl border border-gray-100 shadow-sm px-6">
                             <div className="w-20 h-20 bg-gray-50 rounded-full mx-auto flex items-center justify-center mb-6">
-                                <span className="text-3xl">📭</span>
+                                <FileText size={32} className="text-gray-300" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-3">Artikel Tidak Ditemukan</h3>
-                            <p className="text-gray-500 max-w-sm mx-auto">Kami tidak dapat menemukan artikel dengan kata kunci "{searchQuery}". Coba kata kunci lainnya.</p>
-                            <button
-                                onClick={() => setSearchQuery("")}
-                                className="mt-8 px-8 py-3 bg-red text-white text-sm font-bold rounded-full hover:bg-red/90 transition-colors"
-                            >
-                                Reset Pencarian
-                            </button>
+                            <p className="text-gray-500 max-w-sm mx-auto">
+                                {searchQuery
+                                    ? `Tidak ada artikel dengan kata kunci "${searchQuery}".`
+                                    : "Belum ada artikel yang dipublikasikan."}
+                            </p>
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery("")}
+                                    className="mt-8 px-8 py-3 bg-red text-white text-sm font-bold rounded-full hover:bg-red/90 transition-colors"
+                                >
+                                    Reset Pencarian
+                                </button>
+                            )}
                         </div>
                     </FadeIn>
                 )}
-
             </section>
         </main>
     );

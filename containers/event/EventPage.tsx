@@ -1,20 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
-import { CalendarDays, MapPin, ArrowRight } from "lucide-react";
-import { eventsData, EventStatus } from "@/data/events";
+import { CalendarDays, ArrowRight, Loader2 } from "lucide-react";
+
+interface EventItem {
+    id: number;
+    slug: string;
+    title: string;
+    date: string;
+    image_main: string;
+    section1_text: string;
+}
 
 export default function EventPage() {
-    const [activeFilter, setActiveFilter] = useState<EventStatus>("upcoming");
+    const [events, setEvents] = useState<EventItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredEvents = eventsData.filter(event => event.status === activeFilter);
+    useEffect(() => {
+        async function fetchEvents() {
+            try {
+                const res = await fetch("/api/events");
+                const data = await res.json();
+                setEvents(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error("Error fetching events:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchEvents();
+    }, []);
 
     return (
         <main className="min-h-screen bg-gray-50 pb-24">
-            {/* Hero Section */}
+            {/* Hero */}
             <section className="bg-black py-20 md:py-32 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('/images/landing-page/background2.png')] bg-cover bg-center opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
@@ -34,61 +56,27 @@ export default function EventPage() {
                 </div>
             </section>
 
-            {/* Content Section */}
+            {/* Content */}
             <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 -mt-10 relative z-20">
-
-                {/* Filters */}
-                <FadeIn direction="up" delay={0.1}>
-                    <div className="flex justify-center mb-12">
-                        <div className="bg-white p-2 rounded-full shadow-lg border border-gray-100 flex gap-2">
-                            <button
-                                onClick={() => setActiveFilter("upcoming")}
-                                className={`px-8 py-3 rounded-full text-sm font-bold transition-all ${activeFilter === "upcoming"
-                                    ? "bg-red text-white shadow-md"
-                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                                    }`}
-                            >
-                                Upcoming Events
-                            </button>
-                            <button
-                                onClick={() => setActiveFilter("past")}
-                                className={`px-8 py-3 rounded-full text-sm font-bold transition-all ${activeFilter === "past"
-                                    ? "bg-gray-900 text-white shadow-md"
-                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                                    }`}
-                            >
-                                Past Events
-                            </button>
-                        </div>
+                {loading ? (
+                    <div className="flex items-center justify-center py-32">
+                        <Loader2 size={40} className="animate-spin text-gray-300" />
                     </div>
-                </FadeIn>
-
-                {/* Event Grid */}
-                {filteredEvents.length > 0 ? (
+                ) : events.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredEvents.map((event, index) => (
+                        {events.map((event, index) => (
                             <FadeIn key={event.id} direction="up" delay={0.1 * (index + 1)}>
                                 <Link href={`/event/${event.slug}`} className="block h-full">
-                                    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col group">
-
+                                    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col group hover:-translate-y-1">
                                         {/* Image */}
                                         <div className="relative h-56 w-full overflow-hidden">
                                             <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
                                             <Image
-                                                src={event.image}
+                                                src={event.image_main}
                                                 alt={event.title}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
-                                            {/* Status Badge */}
-                                            <div className="absolute top-4 left-4 z-20">
-                                                <span className={`px-3 py-1 text-xs font-bold rounded-full backdrop-blur-md ${event.status === "upcoming"
-                                                    ? "bg-red/90 text-white"
-                                                    : "bg-gray-900/80 text-white"
-                                                    }`}>
-                                                    {event.status === "upcoming" ? "Register Now" : "Completed"}
-                                                </span>
-                                            </div>
                                         </div>
 
                                         {/* Content */}
@@ -97,23 +85,22 @@ export default function EventPage() {
                                                 {event.title}
                                             </h3>
 
-                                            <div className="space-y-3 mb-6 flex-grow">
-                                                <div className="flex items-start gap-3 text-gray-600 text-sm">
-                                                    <CalendarDays size={18} className="text-red flex-shrink-0" />
-                                                    <span>{event.date}</span>
-                                                </div>
-                                                <div className="flex items-start gap-3 text-gray-600 text-sm">
-                                                    <MapPin size={18} className="text-red flex-shrink-0" />
-                                                    <span className="line-clamp-2">{event.location}</span>
-                                                </div>
+                                            <div className="flex items-center gap-3 text-gray-600 text-sm mb-4">
+                                                <CalendarDays size={16} className="text-red flex-shrink-0" />
+                                                <span>{event.date}</span>
                                             </div>
 
+                                            {event.section1_text && (
+                                                <p className="text-sm text-gray-500 line-clamp-3 mb-6 flex-grow">
+                                                    {event.section1_text}
+                                                </p>
+                                            )}
+
                                             <div className="flex items-center text-red font-bold text-sm group-hover:gap-2 transition-all mt-auto pt-4 border-t border-gray-100">
-                                                <span>See Details</span>
+                                                <span>Lihat Selengkapnya</span>
                                                 <ArrowRight size={16} className="ml-1" />
                                             </div>
                                         </div>
-
                                     </div>
                                 </Link>
                             </FadeIn>
@@ -123,12 +110,11 @@ export default function EventPage() {
                     <FadeIn direction="up">
                         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 border-dashed">
                             <CalendarDays size={48} className="mx-auto text-gray-300 mb-4" />
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Belum ada acara</h3>
-                            <p className="text-gray-500">Saat ini tidak ada acara dengan kategori ini.</p>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Belum ada kegiatan</h3>
+                            <p className="text-gray-500">Saat ini belum ada kegiatan yang dipublikasikan.</p>
                         </div>
                     </FadeIn>
                 )}
-
             </section>
         </main>
     );
